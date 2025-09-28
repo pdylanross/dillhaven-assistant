@@ -1,0 +1,22 @@
+[package]
+name = "dillhaven-assistant-text-to-speech"
+edition = "2021"
+version.workspace = true
+description.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+license.workspace = true
+
+[dependencies]
+dillhaven-assistant-types = { workspace = true }
+dillhaven-assistant-audio = { workspace = true }
+
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+piper-rs = { workspace = true }
+ort-sys = { workspace = true, default-features = false, features = ["load-dynamic"] }
+ort = { workspace = true, features = ["load-dynamic"] }
+dillhaven-assistant-sync = { workspace = true }
+kaudio = { workspace = true }

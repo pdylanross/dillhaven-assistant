@@ -1,0 +1,24 @@
+[package]
+name = "dillhaven-assistant-server"
+edition = "2021"
+version.workspace = true
+description.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+license.workspace = true
+
+[dependencies]
+dillhaven-assistant-observe = { workspace = true }
+dillhaven-assistant-llm = { workspace = true }
+dillhaven-assistant-speech-to-text = { workspace = true }
+dillhaven-assistant-sync = { workspace = true }
+dillhaven-assistant-text-to-speech = { workspace = true }
+dillhaven-assistant-util = { workspace = true }
+dillhaven-assistant-types = { workspace = true }
+
+anyhow = { workspace = true }
+candle-transformers = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+tracing = { workspace = true }
+clap = { workspace = true, features = ["derive"] }

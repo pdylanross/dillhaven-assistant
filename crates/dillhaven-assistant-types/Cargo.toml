@@ -1,0 +1,13 @@
+[package]
+name = "dillhaven-assistant-types"
+edition = "2021"
+version.workspace = true
+description.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+license.workspace = true
+
+[dependencies]
+tracing = { workspace = true }
+tokio = { workspace = true }

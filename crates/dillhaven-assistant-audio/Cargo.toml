@@ -1,0 +1,19 @@
+[package]
+name = "dillhaven-assistant-audio"
+edition = "2021"
+version.workspace = true
+description.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow = { workspace = true }
+cpal = { workspace = true }
+once_cell = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+dillhaven-assistant-types = { workspace = true }
+dillhaven-assistant-observe = { workspace = true }
+rand = { workspace = true }

@@ -1,0 +1,18 @@
+[package]
+name = "dillhaven-assistant-text-processing"
+edition = "2021"
+version.workspace = true
+description.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+license.workspace = true
+
+[dependencies]
+dillhaven-assistant-observe = { workspace = true }
+dillhaven-assistant-sync = { workspace = true }
+
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+tracing = { workspace = true }

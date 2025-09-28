@@ -1,0 +1,27 @@
+[package]
+name = "dillhaven-assistant-speech-to-text"
+edition = "2021"
+version.workspace = true
+description.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+license.workspace = true
+
+[dependencies]
+dillhaven-assistant-audio = { workspace = true }
+dillhaven-assistant-sync = { workspace = true }
+dillhaven-assistant-util = { workspace = true }
+dillhaven-assistant-types = { workspace = true }
+
+moshi = { workspace = true, features = ["cuda"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+anyhow = { workspace = true }
+candle-core = { workspace = true, features = ["cuda"] }
+sentencepiece = { workspace = true }
+candle-nn = { workspace = true }
+candle-transformers = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+kaudio = { workspace = true }
