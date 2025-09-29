@@ -5,8 +5,8 @@ use anyhow::Result;
 use async_trait::async_trait;
 use dillhaven_assistant_sync::stream::{BroadcastStreamProcessor, ItemProcessor};
 use std::sync::Arc;
-use tokio::sync::Mutex;
 use tokio::sync::broadcast::Receiver;
+use tokio::sync::Mutex;
 
 pub const DEFAULT_SPLIT_TOKENS: [char; 3] = ['.', '!', '?'];
 

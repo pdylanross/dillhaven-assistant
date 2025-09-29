@@ -1,5 +1,5 @@
 use crate::stream::DynItemProcessor;
-use tokio::sync::mpsc::{Receiver, Sender, channel};
+use tokio::sync::mpsc::{channel, Receiver, Sender};
 use tracing::{error, instrument};
 
 pub struct MpscStreamProcessor<Out> {

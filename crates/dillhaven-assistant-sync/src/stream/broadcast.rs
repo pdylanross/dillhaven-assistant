@@ -1,5 +1,5 @@
 use crate::stream::DynItemProcessor;
-use tokio::sync::broadcast::{Receiver, Sender, channel};
+use tokio::sync::broadcast::{channel, Receiver, Sender};
 use tracing::{error, instrument};
 
 pub struct BroadcastStreamProcessor<Out> {

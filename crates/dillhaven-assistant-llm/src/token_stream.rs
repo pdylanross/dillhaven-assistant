@@ -1,7 +1,7 @@
 use anyhow::Result;
 use std::sync::Arc;
 use tokenizers::Tokenizer;
-use tokio::sync::broadcast::{Receiver, Sender, channel};
+use tokio::sync::broadcast::{channel, Receiver, Sender};
 use tokio::task::yield_now;
 use tracing::{instrument, trace};
 

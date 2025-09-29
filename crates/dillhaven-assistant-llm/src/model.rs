@@ -8,7 +8,7 @@ use candle_transformers::models::gemma3::{Config as Config3, Model as Model3};
 use candle_transformers::models::mimi::candle;
 use dillhaven_assistant_util::candle::get_device;
 use dillhaven_assistant_util::huggingface::{
-    HuggingFaceApiManger, SafeTensorsIndex, load_json_file_as_async,
+    load_json_file_as_async, HuggingFaceApiManger, SafeTensorsIndex,
 };
 use std::fmt::Debug;
 use std::fs::File;

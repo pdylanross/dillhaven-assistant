@@ -3,8 +3,8 @@ use hf_hub::api::sync::{Api as SyncApi, ApiBuilder as SyncApiBuilder, ApiRepo as
 use hf_hub::api::tokio::{
     Api as AsyncApi, ApiBuilder as AsyncApiBuilder, ApiRepo as AsyncApiRepo, ApiRepo,
 };
-use serde::Deserialize;
 use serde::de::DeserializeOwned;
+use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::path::PathBuf;

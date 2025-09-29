@@ -1,12 +1,12 @@
 use crate::resample::new_resample_processor;
-use anyhow::{Result, anyhow};
+use anyhow::{anyhow, Result};
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use cpal::{FromSample, Sample, SampleFormat, SizedSample, StreamConfig};
 use dillhaven_assistant_sync::stream::mpsc_rx_to_mspc_tx;
 use dillhaven_assistant_types::dialogue::{DialogueCoordinatorRef, DialogueMode};
 use std::collections::VecDeque;
 use std::sync::{Arc, RwLock};
-use tokio::sync::mpsc::{Receiver, Sender, channel};
+use tokio::sync::mpsc::{channel, Receiver, Sender};
 use tracing::{error, instrument, trace};
 
 pub struct AudioPlayback {

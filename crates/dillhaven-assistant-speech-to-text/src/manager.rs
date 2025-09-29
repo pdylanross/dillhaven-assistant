@@ -1,6 +1,6 @@
 use crate::model::MoshiModel;
 use crate::output_stream::TextToSpeechOutputStream;
-use anyhow::{Result, anyhow};
+use anyhow::{anyhow, Result};
 use dillhaven_assistant_audio::audio_capture::AudioCapture;
 use dillhaven_assistant_sync::lifespan::{AppState, LifespanManager};
 use dillhaven_assistant_types::dialogue::{DialogueCoordinatorRef, DialogueMode};

@@ -1,6 +1,6 @@
 use adaptive_barrier::PanicMode;
 use std::sync::Arc;
-use tokio::sync::{RwLock, watch};
+use tokio::sync::{watch, RwLock};
 use tokio::{select, signal};
 use tracing::{error, info, warn};
 
