@@ -230,6 +230,7 @@ mod tests {
 
     #[tokio::test]
     #[instrument]
+    #[ignore] // cannot run on GHA
     async fn test_audio_playback() {
         dillhaven_assistant_observe::init();
 
