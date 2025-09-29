@@ -12,3 +12,9 @@ runs:
       name: setup rust toolchain
       with:
         components: ${{ inputs.components }}
+
+    - uses: awalsh128/cache-apt-pkgs-action@latest
+      with:
+        packages: libasound2-dev
+        # change this version number whenever the package list changes
+        version: 1.0
