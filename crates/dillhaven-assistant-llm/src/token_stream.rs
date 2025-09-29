@@ -78,6 +78,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[ignore] // todo: get auth for HF on GHA
     pub async fn test_tokenizer() {
         dillhaven_assistant_observe::init();
 
