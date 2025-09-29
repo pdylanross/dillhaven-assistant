@@ -792,17 +792,10 @@ name = "dillhaven-assistant"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "candle-transformers",
  "clap",
  "dillhaven-assistant-client",
- "dillhaven-assistant-llm",
  "dillhaven-assistant-observe",
  "dillhaven-assistant-server",
- "dillhaven-assistant-speech-to-text",
- "dillhaven-assistant-sync",
- "dillhaven-assistant-text-to-speech",
- "dillhaven-assistant-types",
- "dillhaven-assistant-util",
  "tokio",
  "tracing",
 ]
@@ -859,8 +852,6 @@ name = "dillhaven-assistant-server"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "candle-transformers",
- "clap",
  "dillhaven-assistant-llm",
  "dillhaven-assistant-observe",
  "dillhaven-assistant-speech-to-text",

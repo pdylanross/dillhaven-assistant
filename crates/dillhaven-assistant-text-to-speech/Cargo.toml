@@ -14,7 +14,7 @@ dillhaven-assistant-audio = { workspace = true }
 
 anyhow = { workspace = true }
 tracing = { workspace = true }
-tokio = { workspace = true, features = ["full"] }
+tokio = { workspace = true }
 piper-rs = { workspace = true }
 ort-sys = { workspace = true, default-features = false, features = ["load-dynamic"] }
 ort = { workspace = true, features = ["load-dynamic"] }

@@ -11,6 +11,6 @@ license.workspace = true
 [dependencies]
 anyhow = { workspace = true }
 adaptive-barrier = { workspace = true }
-tokio = { workspace = true, features = ["full"] }
+tokio = { workspace = true }
 tracing = { workspace = true }
 async-trait = { workspace = true }

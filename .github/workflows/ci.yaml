@@ -8,8 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         name: checkout
-        with:
-          submodules: 'true'
       - uses: ./.github/actions/setup-build-environment
       - name: Run unit tests
         run: |
@@ -21,8 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         name: checkout
-        with:
-          submodules: 'true'
       - uses: ./.github/actions/setup-build-environment
         with:
           components: rustfmt
@@ -35,8 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         name: checkout
-        with:
-          submodules: 'true'
       - uses: ./.github/actions/setup-build-environment
         with:
           components: clippy

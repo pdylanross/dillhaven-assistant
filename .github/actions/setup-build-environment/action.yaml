@@ -12,7 +12,3 @@ runs:
       name: setup rust toolchain
       with:
         components: ${{ inputs.components }}
-    - uses: Jimver/cuda-toolkit@v0.2.28
-      id: cuda-toolkit
-      with:
-        cuda: '12.9.1'

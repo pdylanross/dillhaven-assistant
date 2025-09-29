@@ -18,7 +18,8 @@ dillhaven-assistant-util = { workspace = true }
 dillhaven-assistant-types = { workspace = true }
 
 anyhow = { workspace = true }
-candle-transformers = { workspace = true }
-tokio = { workspace = true, features = ["full"] }
+tokio = { workspace = true }
 tracing = { workspace = true }
-clap = { workspace = true, features = ["derive"] }
+
+[features]
+gpu = ["dillhaven-assistant-llm/cuda", "dillhaven-assistant-llm/flash", "dillhaven-assistant-speech-to-text/cuda", "dillhaven-assistant-speech-to-text/flash"]

@@ -14,5 +14,5 @@ dillhaven-assistant-sync = { workspace = true }
 
 anyhow = { workspace = true }
 async-trait = { workspace = true }
-tokio = { workspace = true, features = ["full"] }
+tokio = { workspace = true }
 tracing = { workspace = true }

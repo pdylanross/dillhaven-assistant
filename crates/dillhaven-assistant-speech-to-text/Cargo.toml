@@ -14,14 +14,18 @@ dillhaven-assistant-sync = { workspace = true }
 dillhaven-assistant-util = { workspace = true }
 dillhaven-assistant-types = { workspace = true }
 
-moshi = { workspace = true, features = ["cuda"] }
+moshi = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 tracing = { workspace = true }
 anyhow = { workspace = true }
-candle-core = { workspace = true, features = ["cuda"] }
+candle-core = { workspace = true }
 sentencepiece = { workspace = true }
 candle-nn = { workspace = true }
 candle-transformers = { workspace = true }
-tokio = { workspace = true, features = ["full"] }
+tokio = { workspace = true }
 kaudio = { workspace = true }
+
+[features]
+cuda = ["moshi/cuda", "candle-core/cuda"]
+flash = ["candle-transformers/flash-attn"]

@@ -11,22 +11,16 @@ license.workspace = true
 
 [dependencies]
 dillhaven-assistant-observe = { workspace = true }
-dillhaven-assistant-llm = { workspace = true }
-dillhaven-assistant-speech-to-text = { workspace = true }
-dillhaven-assistant-sync = { workspace = true }
-dillhaven-assistant-text-to-speech = { workspace = true }
 dillhaven-assistant-server = { workspace = true }
 dillhaven-assistant-client = { workspace = true }
-dillhaven-assistant-util = { workspace = true }
-dillhaven-assistant-types = { workspace = true }
 
 anyhow = { workspace = true }
-candle-transformers = { workspace = true }
-tokio = { workspace = true, features = ["full"] }
+tokio = { workspace = true }
 tracing = { workspace = true }
-clap = { workspace = true, features = ["derive"] }
-
+clap = { workspace = true }
 
 [features]
-flash = ["candle-transformers/flash-attn"]
+gpu = ["dillhaven-assistant-server/gpu"]
+
+
 
