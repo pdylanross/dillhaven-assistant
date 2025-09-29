@@ -8,7 +8,7 @@ use candle_transformers::models::gemma3::{Config as Config3, Model as Model3};
 use candle_transformers::models::mimi::candle;
 use dillhaven_assistant_util::candle::get_device;
 use dillhaven_assistant_util::huggingface::{
-    load_json_file_as_async, HuggingFaceApiManger, SafeTensorsIndex,
+    HuggingFaceApiManger, SafeTensorsIndex, load_json_file_as_async,
 };
 use std::fmt::Debug;
 use std::fs::File;
@@ -129,7 +129,7 @@ impl Model {
         } else {
             return Err(anyhow::anyhow!("failed to find EOS token in tokenizer"));
         };
-        let eot_token = vocab.get("<end_of_turn>").map(|tok| *tok);
+        let eot_token = vocab.get("<end_of_turn>").copied();
 
         Ok(Self {
             inner,

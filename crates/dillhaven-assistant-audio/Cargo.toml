@@ -9,6 +9,8 @@ categories.workspace = true
 license.workspace = true
 
 [dependencies]
+async-trait = { workspace = true }
+kaudio = { workspace = true }
 anyhow = { workspace = true }
 cpal = { workspace = true }
 once_cell = { workspace = true }
@@ -16,4 +18,5 @@ tokio = { workspace = true }
 tracing = { workspace = true }
 dillhaven-assistant-types = { workspace = true }
 dillhaven-assistant-observe = { workspace = true }
+dillhaven-assistant-sync = { workspace = true }
 rand = { workspace = true }

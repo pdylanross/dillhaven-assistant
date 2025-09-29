@@ -3,11 +3,10 @@
 
 use anyhow::Result;
 use async_trait::async_trait;
-use dillhaven_assistant_sync::lifespan::LifespanManager;
 use dillhaven_assistant_sync::stream::{BroadcastStreamProcessor, ItemProcessor};
 use std::sync::Arc;
-use tokio::sync::broadcast::Receiver;
 use tokio::sync::Mutex;
+use tokio::sync::broadcast::Receiver;
 
 pub const DEFAULT_SPLIT_TOKENS: [char; 3] = ['.', '!', '?'];
 
@@ -22,7 +21,7 @@ impl ItemProcessor<String, String> for StreamSentenceChunker {
         let mut lck = self.current_string.lock().await;
 
         lck.push_str(&item);
-        if lck.len() > 0 {
+        if !lck.is_empty() {
             let last = last_non_whitespace(&lck);
             if let Some(last) = last {
                 if self.split_tokens.contains(&last) {
@@ -38,7 +37,7 @@ impl ItemProcessor<String, String> for StreamSentenceChunker {
     async fn done(&self) -> Result<Option<String>> {
         let lck = self.current_string.lock().await;
         let lck = lck.trim().to_string();
-        if lck.len() > 0 {
+        if !lck.is_empty() {
             Ok(Some(lck))
         } else {
             Ok(None)
@@ -61,17 +60,15 @@ impl StreamSentenceChunker {
     pub fn new_processor(
         split_tokens: Vec<char>,
         in_rx: Receiver<String>,
-        lifespan_manager: Arc<LifespanManager>,
     ) -> BroadcastStreamProcessor<String> {
         let processor = Arc::new(Self::new(split_tokens));
-        BroadcastStreamProcessor::new(in_rx, 20, processor, lifespan_manager)
+        BroadcastStreamProcessor::new(in_rx, 20, processor)
     }
 
     pub fn new_processor_with_default_tokens(
         in_rx: Receiver<String>,
-        lifespan_manager: Arc<LifespanManager>,
     ) -> BroadcastStreamProcessor<String> {
-        Self::new_processor(DEFAULT_SPLIT_TOKENS.to_vec(), in_rx, lifespan_manager)
+        Self::new_processor(DEFAULT_SPLIT_TOKENS.to_vec(), in_rx)
     }
 
     pub fn new_default_tokens() -> Self {
@@ -94,9 +91,7 @@ mod tests {
     async fn test_stream_sentence_chunker() {
         dillhaven_assistant_observe::init();
         let (tx, rx) = tokio::sync::broadcast::channel(10);
-        let lifespan_manager = Arc::new(LifespanManager::new());
-        let chunker =
-            StreamSentenceChunker::new_processor_with_default_tokens(rx, lifespan_manager);
+        let chunker = StreamSentenceChunker::new_processor_with_default_tokens(rx);
 
         let mut chunk_rx = chunker.get_result_rx();
 
@@ -108,9 +103,7 @@ mod tests {
     async fn test_stream_sentence_chunker_multiple_sentences() {
         dillhaven_assistant_observe::init();
         let (tx, rx) = tokio::sync::broadcast::channel(10);
-        let lifespan_manager = Arc::new(LifespanManager::new());
-        let chunker =
-            StreamSentenceChunker::new_processor_with_default_tokens(rx, lifespan_manager);
+        let chunker = StreamSentenceChunker::new_processor_with_default_tokens(rx);
         let mut results = Vec::new();
 
         let mut chunk_rx = chunker.get_result_rx();

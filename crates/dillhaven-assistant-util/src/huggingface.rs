@@ -3,8 +3,8 @@ use hf_hub::api::sync::{Api as SyncApi, ApiBuilder as SyncApiBuilder, ApiRepo as
 use hf_hub::api::tokio::{
     Api as AsyncApi, ApiBuilder as AsyncApiBuilder, ApiRepo as AsyncApiRepo, ApiRepo,
 };
-use serde::de::DeserializeOwned;
 use serde::Deserialize;
+use serde::de::DeserializeOwned;
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::path::PathBuf;
@@ -41,7 +41,7 @@ pub async fn load_json_file_as_async<T: DeserializeOwned>(
     path: &str,
 ) -> Result<T> {
     let json_file = repo.get(path).await?;
-    Ok(des_json_file(json_file)?)
+    des_json_file(json_file)
 }
 
 pub async fn load_json_file_as_sync<T: DeserializeOwned>(
@@ -49,7 +49,7 @@ pub async fn load_json_file_as_sync<T: DeserializeOwned>(
     path: &str,
 ) -> Result<T> {
     let json_file = repo.get(path)?;
-    Ok(des_json_file(json_file)?)
+    des_json_file(json_file)
 }
 
 fn des_json_file<T: DeserializeOwned>(path: PathBuf) -> Result<T> {

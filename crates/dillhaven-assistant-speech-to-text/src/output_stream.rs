@@ -59,7 +59,7 @@ impl TextToSpeechOutputStream {
                         }
 
                         if let Ok(message) = message {
-                            current_message.push_str(&message.trim_end());
+                            current_message.push_str(message.trim_end());
                             current_message.push(' ');
                             timer.restart().await;
                         }

@@ -1,6 +1,6 @@
 use crate::model::MoshiModel;
 use crate::output_stream::TextToSpeechOutputStream;
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 use dillhaven_assistant_audio::audio_capture::AudioCapture;
 use dillhaven_assistant_sync::lifespan::{AppState, LifespanManager};
 use dillhaven_assistant_types::dialogue::{DialogueCoordinatorRef, DialogueMode};
@@ -78,13 +78,10 @@ impl STTManager {
             loop {
                 select! {
                     res = loop_processor.run_loop() => {
-                        match res {
-                            Err(e) => {
-                                error!("Error processing audio: {}", e);
-                                lifespan_manager.crash(e);
-                                break
-                            }
-                            Ok(()) => {}
+                        if let Err(e) = res {
+                            error!("Error processing audio: {}", e);
+                            lifespan_manager.crash(e);
+                            break
                         }
                     },
                     event = app_state_rx.changed() => {
@@ -93,11 +90,8 @@ impl STTManager {
                             break;
                         } else {
                             let val = app_state_rx.borrow_and_update();
-                            match *val {
-                                AppState::Shutdown => {
-                                    break
-                                }
-                                _ => {}
+                            if let AppState::Shutdown = *val {
+                                break
                             }
                         }
                     }

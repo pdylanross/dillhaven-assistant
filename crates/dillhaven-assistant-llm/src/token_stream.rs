@@ -1,7 +1,7 @@
 use anyhow::Result;
 use std::sync::Arc;
 use tokenizers::Tokenizer;
-use tokio::sync::broadcast::{channel, Receiver, Sender};
+use tokio::sync::broadcast::{Receiver, Sender, channel};
 use tokio::task::yield_now;
 use tracing::{instrument, trace};
 
@@ -37,7 +37,7 @@ impl TokenizerHandler {
         }
         let text = text.unwrap();
 
-        if text.len() > 0 {
+        if !text.is_empty() {
             trace!("sending token text: {}", text);
             self.stream_tx.send(text)?;
 
@@ -74,8 +74,7 @@ mod tests {
             .await
             .expect("Failed to get tokenizer.json");
 
-        let tokenizer = Tokenizer::from_file(tokenizer_filename).unwrap();
-        tokenizer
+        Tokenizer::from_file(tokenizer_filename).unwrap()
     }
 
     #[tokio::test]

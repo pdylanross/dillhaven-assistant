@@ -1,10 +1,12 @@
-use anyhow::{anyhow, Result};
+use crate::resample::new_resample_processor;
+use anyhow::{Result, anyhow};
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use cpal::{FromSample, Sample, SampleFormat, SizedSample, StreamConfig};
+use dillhaven_assistant_sync::stream::mpsc_rx_to_mspc_tx;
 use dillhaven_assistant_types::dialogue::{DialogueCoordinatorRef, DialogueMode};
 use std::collections::VecDeque;
 use std::sync::{Arc, RwLock};
-use tokio::sync::mpsc::{channel, Receiver, Sender};
+use tokio::sync::mpsc::{Receiver, Sender, channel};
 use tracing::{error, instrument, trace};
 
 pub struct AudioPlayback {
@@ -90,6 +92,17 @@ impl AudioPlayback {
     pub fn get_in_tx(&self) -> Sender<Vec<f32>> {
         self.in_tx.clone()
     }
+
+    pub fn get_resampled_tx(&self, input_sample_rate: usize) -> Sender<Vec<f32>> {
+        let (tx, rx) = channel(100);
+        let processor =
+            new_resample_processor(rx, input_sample_rate, self.get_sample_rate() as usize);
+
+        let audio_tx = self.get_in_tx();
+        mpsc_rx_to_mspc_tx(processor.get_result_rx(), audio_tx);
+
+        tx
+    }
 }
 
 #[instrument(skip(data, buf))]
@@ -112,9 +125,9 @@ fn process_output<T>(
 
     let size = data.len() / num_channels;
     let mut queue = buf.front(size);
-    if queue.len() > 0 && DialogueMode::Speaking != dialogue_coordinator.get_current_state() {
+    if !queue.is_empty() && DialogueMode::Speaking != dialogue_coordinator.get_current_state() {
         dialogue_coordinator.set_current_state(DialogueMode::Speaking);
-    } else if queue.len() == 0 && DialogueMode::Speaking == dialogue_coordinator.get_current_state()
+    } else if queue.is_empty() && DialogueMode::Speaking == dialogue_coordinator.get_current_state()
     {
         dialogue_coordinator.set_current_state(DialogueMode::PassiveListening);
     }

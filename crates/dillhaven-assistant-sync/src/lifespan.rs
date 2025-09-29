@@ -1,6 +1,6 @@
 use adaptive_barrier::PanicMode;
 use std::sync::Arc;
-use tokio::sync::{watch, RwLock};
+use tokio::sync::{RwLock, watch};
 use tokio::{select, signal};
 use tracing::{error, info, warn};
 
@@ -15,6 +15,12 @@ pub struct LifespanManager {
     current_state_tx: Arc<watch::Sender<AppState>>,
     init_barrier: Arc<RwLock<adaptive_barrier::Barrier>>,
     shutdown_barrier: Arc<RwLock<adaptive_barrier::Barrier>>,
+}
+
+impl Default for LifespanManager {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl LifespanManager {
@@ -48,7 +54,7 @@ impl LifespanManager {
             }
 
             // ensure we didn't crash during startup
-            let cur_state = { state_rx.borrow().clone() };
+            let cur_state = { *state_rx.borrow() };
 
             if let AppState::Shutdown = cur_state {
                 let mut shutdown = shutdown_barrier.write().await;
@@ -137,14 +143,11 @@ impl LifespanShutdownSignaler {
 
     pub async fn flagged_for_shutdown(&mut self) -> bool {
         let event = self.rx.changed().await;
-        if let Err(_) = event {
+        if event.is_err() {
             return true;
         }
 
         let current_val = self.rx.borrow_and_update();
-        match *current_val {
-            AppState::Shutdown => true,
-            _ => false,
-        }
+        matches!(*current_val, AppState::Shutdown)
     }
 }

@@ -136,10 +136,7 @@ impl AudioCapture {
 
     /// Returns the next audio buffer if available
     pub fn next_buffer(&mut self) -> Option<Vec<f32>> {
-        match self.receiver.try_recv() {
-            Ok(buffer) => Some(buffer),
-            Err(_) => None,
-        }
+        self.receiver.try_recv().ok()
     }
 
     /// Creates a new receiver that will get the same audio data

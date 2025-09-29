@@ -61,12 +61,7 @@ impl LLMManager {
                 return;
             }
 
-            let mut inner = LLMMangerInner::new(
-                input_rx,
-                model.unwrap(),
-                output_tx,
-                lifespan_manager.clone(),
-            );
+            let mut inner = LLMMangerInner::new(input_rx, model.unwrap(), output_tx);
             let mut state_rx = lifespan_manager.get_state_rx();
             init_barrier.wait();
 
@@ -83,10 +78,8 @@ impl LLMManager {
                                 lifespan_manager.crash(e);
                                 break
                             }
-                        } else {
-                            if inference_errs > 0 {
-                                inference_errs = 0;
-                            }
+                        } else if inference_errs > 0 {
+                            inference_errs = 0;
                         }
                     },
                     event = state_rx.changed() => {
@@ -95,11 +88,8 @@ impl LLMManager {
                             break;
                         } else {
                             let val = state_rx.borrow_and_update();
-                            match *val {
-                                AppState::Shutdown => {
-                                    break
-                                }
-                                _ => {}
+                            if let AppState::Shutdown = *val {
+                                break
                             }
                         }
                     }
@@ -116,16 +106,10 @@ struct LLMMangerInner {
     model: Model,
     output_tx: Sender<String>,
     prompt_processor: PromptProcessor,
-    lifespan_manager: Arc<LifespanManager>,
 }
 
 impl LLMMangerInner {
-    pub fn new(
-        input_rx: Receiver<String>,
-        model: Model,
-        output_tx: Sender<String>,
-        lifespan_manager: Arc<LifespanManager>,
-    ) -> Self {
+    pub fn new(input_rx: Receiver<String>, model: Model, output_tx: Sender<String>) -> Self {
         let prompt_processor = PromptProcessor::new();
 
         Self {
@@ -133,7 +117,6 @@ impl LLMMangerInner {
             model,
             output_tx,
             prompt_processor,
-            lifespan_manager,
         }
     }
 
@@ -141,17 +124,14 @@ impl LLMMangerInner {
         let res = self.input_rx.recv().await?;
         let prompt = self.prompt_processor.process(res);
         let inference_res = self.model.prompt(prompt)?;
-        let chunker = StreamSentenceChunker::new_processor_with_default_tokens(
-            inference_res,
-            self.lifespan_manager.clone(),
-        );
+        let chunker = StreamSentenceChunker::new_processor_with_default_tokens(inference_res);
         let mut chunk_rx = chunker.get_result_rx();
         let tx = self.output_tx.clone();
         tokio::spawn(async move {
             while let Ok(chunk) = chunk_rx.recv().await {
                 trace!("chunk: {}", chunk);
 
-                if let Err(_) = tx.send(chunk) {
+                if tx.send(chunk).is_err() {
                     return;
                 };
             }

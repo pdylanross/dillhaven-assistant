@@ -1,6 +1,6 @@
 use anyhow::Result;
 use piper_rs::synth::PiperSpeechSynthesizer;
-use piper_rs::{from_config_path, PiperAudioResult};
+use piper_rs::{PiperAudioResult, from_config_path};
 use std::path::Path;
 
 pub const MODEL_PATH: &str = "/home/dylan/Documents/git/dillhaven-assistant/piper-finetune/data/en_US-patrickstewartemote-medium.onnx.json";
@@ -13,17 +13,24 @@ pub struct PiperModelConfig {
 pub struct PiperModel {
     _config: PiperModelConfig,
     synth: PiperSpeechSynthesizer,
+    sample_rate: usize,
 }
 
 impl PiperModel {
     pub fn new(config: PiperModelConfig) -> Result<Self> {
         let model = from_config_path(Path::new(&config.config_path))?;
+        let sample_rate = model.audio_output_info()?.sample_rate;
         let synth = PiperSpeechSynthesizer::new(model.clone())?;
 
         Ok(PiperModel {
             synth,
+            sample_rate,
             _config: config,
         })
+    }
+
+    pub fn get_sample_rate(&self) -> usize {
+        self.sample_rate
     }
 
     pub fn synth(&self, text: String) -> Result<impl Iterator<Item = PiperAudioResult>> {

@@ -812,9 +812,12 @@ name = "dillhaven-assistant-audio"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-trait",
  "cpal",
  "dillhaven-assistant-observe",
+ "dillhaven-assistant-sync",
  "dillhaven-assistant-types",
+ "kaudio",
  "once_cell",
  "rand",
  "tokio",

@@ -1,5 +1,5 @@
-use crate::piper::{PiperModel, PiperModelConfig, MODEL_PATH};
-use anyhow::{anyhow, Result};
+use crate::piper::{MODEL_PATH, PiperModel, PiperModelConfig};
+use anyhow::{Result, anyhow};
 use dillhaven_assistant_audio::audio_playback::AudioPlayback;
 use dillhaven_assistant_sync::lifespan::{AppState, LifespanManager};
 use dillhaven_assistant_types::dialogue::DialogueCoordinatorRef;
@@ -45,9 +45,9 @@ impl TTSManager {
                 lifespan_manager.crash(e);
                 return;
             }
+
             let playback = playback.unwrap();
-            let audio_tx = playback.get_in_tx();
-            let sample_rate = playback.get_sample_rate() as usize;
+            let audio_tx = playback.get_resampled_tx(model.get_sample_rate());
 
             loop {
                 select! {
@@ -64,14 +64,7 @@ impl TTSManager {
                             for res in piper_res {
                                 let res = res.unwrap();
 
-                                let resampled = kaudio::resample(
-                                    res.samples.into_vec().as_slice(),
-                                    res.info.sample_rate,
-                                    sample_rate,
-                                )
-                                .expect("failed to resample audio");
-
-                                if let Err(e) = audio_tx.send(resampled).await {
+                                if let Err(e) = audio_tx.send(res.samples.into_vec()).await {
                                     error!("Error sending audio: {}", e);
                                     lifespan_manager.crash(anyhow!(e));
                                     return
@@ -85,11 +78,8 @@ impl TTSManager {
                                 break;
                             } else {
                                 let val = app_state_rx.borrow_and_update();
-                                match *val {
-                                    AppState::Shutdown => {
-                                        break
-                                    }
-                                    _ => {}
+                                if let AppState::Shutdown = *val {
+                                    break
                                 }
                             }
                         }

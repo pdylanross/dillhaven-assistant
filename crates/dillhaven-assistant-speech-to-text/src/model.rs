@@ -105,7 +105,7 @@ impl MoshiModel {
                 moshi::asr::AsrMsg::Word { tokens, .. } => {
                     let word = self
                         .text_tokenizer
-                        .decode_piece_ids(&tokens)
+                        .decode_piece_ids(tokens)
                         .unwrap_or_else(|_| String::new());
 
                     callback(&word);
