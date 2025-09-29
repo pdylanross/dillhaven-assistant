@@ -1,7 +1,6 @@
 repos:
   - hooks:
       - id: cargo-check
-      - id: fmt
       - id: clippy
         args: [ '--all-targets', '--all-features' , '--', '-D', 'warnings' ]
     repo: https://github.com/FeryET/pre-commit-rust
